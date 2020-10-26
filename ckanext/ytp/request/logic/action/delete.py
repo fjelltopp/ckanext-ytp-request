@@ -1,5 +1,6 @@
 from ckan import model, logic
 from ckanext.ytp.request.model import MemberRequest
+from sqlalchemy import desc
 from sqlalchemy.sql.expression import or_
 from ckan.lib.dictization import model_dictize
 from ckan.common import c
@@ -81,7 +82,7 @@ def _process_request(context, organization_id, member, status):
     # last modified field)
     member_request = model.Session.query(MemberRequest) \
         .filter(MemberRequest.membership_id == member.id) \
-        .order_by('request_date desc').limit(1).first()
+        .order_by(desc(MemberRequest.request_date)).limit(1).first()
 
     # BFW: Create a new instance every time membership status is changed
     message = u'Member request cancelled by own user'
