@@ -19,6 +19,7 @@ class YtpRequestController(BaseController):
         data_dict['all_fields'] = True
         data_dict['groups'] = []
         data_dict['type'] = 'organization'
+        data_dict['limit'] = 1000
         # TODO: Filter our organizations where the user is already a member or
         # has a pending request
         return toolkit.get_action('organization_list')({}, data_dict)
