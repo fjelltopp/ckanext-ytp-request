@@ -1,7 +1,7 @@
 import uuid
 import datetime
 
-from sqlalchemy import Column, MetaData
+from sqlalchemy import Column, MetaData, ForeignKey
 from sqlalchemy import types
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -21,7 +21,7 @@ REQUEST_CANCEL = "cancel"
 
 
 def make_uuid():
-    return unicode(uuid.uuid4())
+    return str(uuid.uuid4())
 
 
 class MemberRequest(Base):
@@ -37,7 +37,7 @@ class MemberRequest(Base):
     id = Column(types.UnicodeText, primary_key=True, default=make_uuid)
     # Reference to the table containing the composite key for organization and
     # user
-    membership_id = Column(types.UnicodeText)
+    membership_id = Column(types.UnicodeText, ForeignKey(model.Member.id))
     request_date = Column(types.DateTime, default=datetime.datetime.now)
     role = Column(types.UnicodeText)
     handling_date = Column(types.DateTime)

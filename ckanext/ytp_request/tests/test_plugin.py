@@ -10,8 +10,6 @@ import ckanext.ytp_request.model as rmodel
 import ckan.tests.helpers as helpers
 import ckan.tests.factories as factories
 
-PLUGIN_CONTROLLER = 'ckanext.ytp_request.controller:YtpRequestController'
-
 
 @pytest.fixture
 def initdb():
@@ -39,7 +37,6 @@ class TestViewingActionedReferral(object):
         org = factories.Organization()
         sysadmin = factories.Sysadmin()
         regular_user = factories.User()
-
         # user creates membership request
         membership_request = helpers.call_action(
             'member_request_create',
@@ -47,6 +44,20 @@ class TestViewingActionedReferral(object):
             group=org['name'],
             role='member'
         )
+        print(membership_request['id'])
+
+        # admin view membership request page again
+        url = url_for(
+            'member_request.show',
+            mrequest_id=membership_request['id']
+        )
+
+        response_for_existing_request = app.get(
+            url,
+            extra_environ={'REMOTE_USER': sysadmin['name'].encode('ascii')},
+            expect_errors=True
+        )
+        assert response_for_existing_request.status_code == 200
 
         # admin approves membership
         helpers.call_action(
@@ -56,17 +67,10 @@ class TestViewingActionedReferral(object):
             mrequest_id=membership_request['id']
         )
 
-        # admin view membership request page again
-        url = url_for(
-            controller=PLUGIN_CONTROLLER,
-            action='show',
-            mrequest_id=membership_request['id']
-        )
-
         # test request no longer 404s
-        response = app.get(
+        response_for_approved_request = app.get(
             url,
             extra_environ={'REMOTE_USER': sysadmin['name'].encode('ascii')},
             expect_errors=True
         )
-        assert response.status_code == 200
+        assert response_for_approved_request.status_code == 404
