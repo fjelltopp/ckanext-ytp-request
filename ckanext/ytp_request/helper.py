@@ -6,7 +6,6 @@ from ckan.plugins.toolkit import config
 from ckan.plugins import toolkit
 
 
-
 def get_user_member(organization_id, state=None):
     """ Helper function to get member states """
     state_query = None

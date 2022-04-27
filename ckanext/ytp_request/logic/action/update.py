@@ -1,6 +1,5 @@
 from ckan import model, logic
 from ckanext.ytp_request.model import MemberRequest
-from ckan.common import c
 from ckanext.ytp_request.helper import get_default_locale
 from ckanext.ytp_request.mail import mail_process_status
 from sqlalchemy import desc
@@ -84,7 +83,6 @@ def _process(context, action, data_dict):
     if role:
         message = message + " Role changed"
     member_request.message = message
-    
     if role:
         member_request.role = role
     member.save()

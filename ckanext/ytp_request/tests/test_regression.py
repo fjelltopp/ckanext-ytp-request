@@ -6,6 +6,7 @@ from ckan.logic import ValidationError
 import ckan.tests.helpers as helpers
 import ckan.tests.factories as factories
 
+
 @pytest.mark.ckan_config(u'ckan.plugins', u'ytp_request')
 @pytest.mark.usefixtures(u'with_plugins')
 @pytest.mark.usefixtures(u'with_request_context')
