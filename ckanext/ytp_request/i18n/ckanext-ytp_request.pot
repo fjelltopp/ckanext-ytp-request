@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-ytp_request 0.2\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-05-05 07:38+0000\n"
+"POT-Creation-Date: 2022-05-09 08:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,21 +47,22 @@ msgstr ""
 #: ckanext/ytp_request/mail.py:15
 #, python-format
 msgid ""
-"User %(user)s (%(email)s) has requested membership to organization "
+"        User %(user)s (%(email)s) has requested membership to organization "
 "%(organization)s.\n"
 "\n"
-"%(link)s\n"
+"        %(link)s\n"
 "\n"
-"Best wishes,\n"
-"The AIDS Data Repository\n"
+"        Best wishes,\n"
+"        The AIDS Data Repository\n"
+"        "
 msgstr ""
 
-#: ckanext/ytp_request/mail.py:26
+#: ckanext/ytp_request/mail.py:28
 #, python-format
 msgid "Organization membership approved (%(organization)s)"
 msgstr ""
 
-#: ckanext/ytp_request/mail.py:32
+#: ckanext/ytp_request/mail.py:34
 #, python-format
 msgid ""
 "        Your membership request to organization %(organization)s with "
@@ -73,12 +74,12 @@ msgid ""
 "        "
 msgstr ""
 
-#: ckanext/ytp_request/mail.py:44
+#: ckanext/ytp_request/mail.py:46
 #, python-format
 msgid "Organization membership rejected (%(organization)s)"
 msgstr ""
 
-#: ckanext/ytp_request/mail.py:50
+#: ckanext/ytp_request/mail.py:52
 #, python-format
 msgid ""
 "        Unfortunately your membership request to organization "
