@@ -1,9 +1,5 @@
-# French translations for ckanext-ytp-request.
-# Copyright (C) 2022 ORGANIZATION
-# This file is distributed under the same license as the ckanext-ytp-request
-# project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
+# <>, 2015-2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-ytp-request 0.2\n"
@@ -232,7 +228,7 @@ msgstr "Demander une adhésion"
 #: ckanext/ytp_request/templates/request/mylist.html:56
 #: ckanext/ytp_request/templates/snippets/organization.html:13
 msgid "Are you sure you want to end the membership?"
-msgstr "Êtes-vous sûr de vouloir mettre fin à cette adhésion ?"
+msgstr "Êtes-vous sûr de vouloir mettre fin à cette adhésion ?"
 
 #: ckanext/ytp_request/templates/organization/read.html:15
 #: ckanext/ytp_request/templates/request/mylist.html:59
@@ -242,7 +238,7 @@ msgstr "Annuler l’adhésion"
 #: ckanext/ytp_request/templates/organization/read.html:18
 #: ckanext/ytp_request/templates/request/mylist.html:62
 msgid "Are you sure you want to cancel this pending request?"
-msgstr "Êtes-vous sûr de vouloir annuler cette demande en cours ?"
+msgstr "Êtes-vous sûr de vouloir annuler cette demande en cours ?"
 
 #: ckanext/ytp_request/templates/organization/read.html:21
 #: ckanext/ytp_request/templates/request/mylist.html:65
@@ -272,7 +268,7 @@ msgid ""
 msgstr ""
 "Toutes les demandes d’adhésion reçues sont répertoriées ici. "
 "L’administrateur de l’organisation peut les approuver ou les refuser. "
-"Pour traiter une demande, cliquez sur « Modifier ». Les administrateurs "
+"Pour traiter une demande, cliquez sur « Modifier ». Les administrateurs "
 "peuvent modifier l’organisation et les ensembles de données, et accepter "
 "les demandes d’adhésion. L’éditeur peut uniquement modifier les ensembles"
 " de données."
@@ -359,11 +355,11 @@ msgstr "État"
 
 #: ckanext/ytp_request/templates/request/show.html:62
 msgid "Are you sure you want approve this request?"
-msgstr "Êtes-vous sûr de vouloir approuver cette demande ?"
+msgstr "Êtes-vous sûr de vouloir approuver cette demande ?"
 
 #: ckanext/ytp_request/templates/request/show.html:65
 msgid "Are you sure you want reject this request?"
-msgstr "Êtes-vous sûr de vouloir refuser cette demande ?"
+msgstr "Êtes-vous sûr de vouloir refuser cette demande ?"
 
 #: ckanext/ytp_request/templates/snippets/organization.html:9
 msgid "Request to Join"
@@ -379,7 +375,7 @@ msgid ""
 "organisation?"
 msgstr ""
 "Êtes-vous sûr de vouloir annuler cette demande d’adhésion auprès de "
-"l’organisation ?"
+"l’organisation ?"
 
 #: ckanext/ytp_request/templates/snippets/organization.html:22
 msgid "Cancel Request"

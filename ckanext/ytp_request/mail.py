@@ -62,16 +62,16 @@ def _MESSAGE_MEMBERSHIP_REJECTED():
 
 
 def mail_new_membership_request(locale, admin, group_name, url, user_name, user_email):
-
-    subject = _SUBJECT_MEMBERSHIP_REQUEST() % {
-        'organization': group_name
-    }
-    message = _MESSAGE_MEMBERSHIP_REQUEST() % {
-        'user': user_name,
-        'email': user_email,
-        'organization': group_name,
-        'link': url
-    }
+    with force_locale('en'):
+        subject = _SUBJECT_MEMBERSHIP_REQUEST() % {
+            'organization': group_name
+        }
+        message = _MESSAGE_MEMBERSHIP_REQUEST() % {
+            'user': user_name,
+            'email': user_email,
+            'organization': group_name,
+            'link': url
+        }
 
     try:
         mail_user(admin, subject, message)
