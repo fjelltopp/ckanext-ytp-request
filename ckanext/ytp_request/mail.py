@@ -14,7 +14,7 @@ def _SUBJECT_MEMBERSHIP_REQUEST():
 def _MESSAGE_MEMBERSHIP_REQUEST():
     return _(
         """\
-        User %(user)s (%(email)s) has requested membership to organization %(organization)s.
+        User %(user)s (%(email)s), %(job_title)s at %(affiliation)s, has requested membership to organization %(organization)s.
 
         %(link)s
 
@@ -61,7 +61,7 @@ def _MESSAGE_MEMBERSHIP_REJECTED():
     )
 
 
-def mail_new_membership_request(locale, admin, group_name, url, user_name, user_email):
+def mail_new_membership_request(locale, admin, group_name, url, user_name, user_email, user_job_title, user_affiliation):
     with force_locale('en'):
         subject = _SUBJECT_MEMBERSHIP_REQUEST() % {
             'organization': group_name
@@ -70,7 +70,9 @@ def mail_new_membership_request(locale, admin, group_name, url, user_name, user_
             'user': user_name,
             'email': user_email,
             'organization': group_name,
-            'link': url
+            'link': url,
+            'job_title': user_job_title,
+            'affiliation': user_affiliation
         }
 
     try:

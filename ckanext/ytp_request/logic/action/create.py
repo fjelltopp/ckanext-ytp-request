@@ -40,6 +40,9 @@ def _create_member_request(context, data_dict):
             "As a sysadmin, you already have access to all organizations")})
 
     userobj = model.User.get(user)
+    extras = userobj.plugin_extras['unaids']
+    user_job_title = extras.get('job_title', '')
+    user_affiliation = extras.get('affiliation', '')
 
     member = (model.Session.query(model.Member)
                            .filter(model.Member.table_name == "user")
@@ -95,11 +98,11 @@ def _create_member_request(context, data_dict):
     if role == 'admin':
         for admin in _get_ckan_admins():
             mail_new_membership_request(
-                locale, admin, group.display_name, url, userobj.display_name, userobj.email)
+                locale, admin, group.display_name, url, userobj.display_name, userobj.email, user_job_title, user_affiliation)
     else:
         for admin in _get_organization_admins(group.id):
             mail_new_membership_request(
-                locale, admin, group.display_name, url, userobj.display_name, userobj.email)
+                locale, admin, group.display_name, url, userobj.display_name, userobj.email, user_job_title, user_affiliation)
     flash_success(
         _("Membership request sent to organisation administrator")
     )
