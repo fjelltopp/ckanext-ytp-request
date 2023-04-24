@@ -100,4 +100,3 @@ class TestRegression(object):
 
         # check if mail_new_membership_request has been called
         assert create_mail_new_membership_request_success.call_count > 0
-
