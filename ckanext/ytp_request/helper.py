@@ -5,6 +5,19 @@ from sqlalchemy.sql.expression import or_
 from ckan.plugins.toolkit import config
 from ckan.plugins import toolkit
 
+try:
+    from flask import url_for
+except ImportError:
+    from ckan.lib.helpers import url_for
+
+
+def url(*args, **kwargs):
+    """
+    Wrapper for url_for to maintain compatibility with CKAN 2.9 templates.
+    In CKAN 2.10+, h.url was removed in favor of h.url_for.
+    """
+    return url_for(*args, **kwargs)
+
 
 def get_user_member(organization_id, state=None):
     """ Helper function to get member states """
