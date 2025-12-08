@@ -1,5 +1,5 @@
 ckantoolkit==0.0.4
-pytest==4.6.11
+pytest>=7.4
 pytest-ckan
 pytest-cov
 

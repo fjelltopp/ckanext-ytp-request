@@ -4,7 +4,7 @@ from ckan.lib.plugins import DefaultTranslation
 import logging
 from .cli import get_commands
 from . import views
-from .helper import get_member_request_list
+from .helper import get_member_request_list, url
 
 log = logging.getLogger(__name__)
 
@@ -67,5 +67,6 @@ class YtpRequestPlugin(plugins.SingletonPlugin, DefaultTranslation):
     # ITemplateHelpers
     def get_helpers(self):
         return {
-            'get_member_request_list': get_member_request_list
+            'get_member_request_list': get_member_request_list,
+            'url': url
         }

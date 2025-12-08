@@ -1,8 +1,11 @@
 # encoding: utf-8
 
 import pytest
-import mock
-from ckan.lib.helpers import url_for
+from unittest import mock
+try:
+    from flask import url_for
+except ImportError:
+    from ckan.lib.helpers import url_for
 
 import ckan.tests.helpers as helpers
 import ckan.tests.factories as factories
