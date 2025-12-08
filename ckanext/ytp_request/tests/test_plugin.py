@@ -2,7 +2,10 @@
 
 import pytest
 from unittest import mock
-from ckan.lib.helpers import url_for
+try:
+    from flask import url_for
+except ImportError:
+    from ckan.lib.helpers import url_for
 
 import ckan.tests.helpers as helpers
 import ckan.tests.factories as factories
