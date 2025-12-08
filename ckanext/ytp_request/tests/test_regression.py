@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 import pytest
-import mock
+from unittest import mock
 from ckan.logic import ValidationError
 import ckan.tests.helpers as helpers
 import ckan.tests.factories as factories

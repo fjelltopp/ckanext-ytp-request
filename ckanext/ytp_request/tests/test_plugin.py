@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 import pytest
-import mock
+from unittest import mock
 from ckan.lib.helpers import url_for
 
 import ckan.tests.helpers as helpers
