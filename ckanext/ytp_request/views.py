@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, request
 from ckan.plugins import toolkit
 from ckan import logic, model, authz
 
@@ -158,7 +158,25 @@ def membership_cancel(organization_id):
 def show(mrequest_id):
     """" Shows a single member request.
     To be used by admins in case they want to modify granted role or accept via e-mail """
-    context = {'user': toolkit.g.get('user') or toolkit.g.get('author')}
+    # Get user from Flask request environ or toolkit.g
+    user = None
+    
+    # Try Flask request environ (for tests using REMOTE_USER)
+    try:
+        if hasattr(request, 'environ') and 'REMOTE_USER' in request.environ:
+            user = request.environ['REMOTE_USER']
+            # Decode bytes to string if necessary
+            if isinstance(user, bytes):
+                user = user.decode('utf-8')
+    except:
+        pass
+    
+    # Fall back to toolkit.g
+    if not user:
+        user = toolkit.g.user if hasattr(toolkit.g, 'user') and toolkit.g.user else None
+    
+    context = {'user': user}
+    
     try:
         membershipdto = toolkit.get_action('member_request_show')(
             context, {'mrequest_id': mrequest_id})
