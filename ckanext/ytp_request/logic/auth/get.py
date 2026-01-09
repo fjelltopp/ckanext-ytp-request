@@ -1,7 +1,6 @@
 import logging
 from ckan import model, authz
 from ckan.common import _
-from ckan.plugins import toolkit
 
 log = logging.getLogger(__name__)
 
