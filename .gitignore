@@ -34,3 +34,4 @@ nosetests.xml
 test.py
 execute.py
 .settings
+PROGRESS.md
