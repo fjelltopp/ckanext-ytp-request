@@ -168,7 +168,7 @@ def show(mrequest_id):
             # Decode bytes to string if necessary
             if isinstance(user, bytes):
                 user = user.decode('utf-8')
-    except Exception:
+    except (AttributeError, KeyError, TypeError, UnicodeDecodeError):
         pass
 
     # Fall back to toolkit.g
