@@ -8,15 +8,34 @@ request_not_found_message = toolkit._('Request not found')
 
 
 def _get_user():
+    """Return the authenticated username for the current request.
+
+    Resolution order:
+    1. ``toolkit.g.user`` — CKAN's session-validated identity, set by Flask-Login
+       via ``identify_user()`` during ``ckan_before_request``. This is the primary
+       and most trustworthy source in production.
+    2. ``REMOTE_USER`` environ key — fallback for test environments where
+       ``toolkit.g.user`` may not be populated (e.g. when using ``extra_environ``
+       in test client requests). The value is validated against the database and
+       rejected if the user does not exist or has been deleted, preventing
+       impersonation via an injected environ key.
+
+    Returns the username string, or ``None`` if no authenticated user can be
+    determined.
+    """
+    if hasattr(toolkit.g, 'user') and toolkit.g.user:
+        return toolkit.g.user
     try:
         if 'REMOTE_USER' in request.environ:
             user = request.environ['REMOTE_USER']
             if isinstance(user, bytes):
                 user = user.decode('utf-8')
-            return user
+            userobj = model.User.get(user)
+            if userobj and not userobj.is_deleted():
+                return user
     except (AttributeError, KeyError, TypeError, UnicodeDecodeError):
         pass
-    return toolkit.g.user if hasattr(toolkit.g, 'user') and toolkit.g.user else None
+    return None
 
 
 member_request = Blueprint('member_request', __name__, url_prefix='/member-request')
