@@ -14,11 +14,11 @@ def _get_user():
     1. ``toolkit.g.user`` — CKAN's session-validated identity, set by Flask-Login
        via ``identify_user()`` during ``ckan_before_request``. This is the primary
        and most trustworthy source in production.
-    2. ``REMOTE_USER`` environ key — fallback for test environments where
-       ``toolkit.g.user`` may not be populated (e.g. when using ``extra_environ``
-       in test client requests). The value is validated against the database and
-       rejected if the user does not exist or has been deleted, preventing
-       impersonation via an injected environ key.
+    2. ``REMOTE_USER`` environ key — fallback active only when ``testing = true``
+       in the CKAN config, for test environments where ``toolkit.g.user`` may not
+       be populated (e.g. when using ``extra_environ`` in test client requests).
+       The value is validated against the database and rejected if the user does
+       not exist or has been deleted. This path is never active in production.
 
     Returns the username string, or ``None`` if no authenticated user can be
     determined.
@@ -26,7 +26,7 @@ def _get_user():
     if hasattr(toolkit.g, 'user') and toolkit.g.user:
         return toolkit.g.user
     try:
-        if 'REMOTE_USER' in request.environ:
+        if toolkit.config.get('testing') and 'REMOTE_USER' in request.environ:
             user = request.environ['REMOTE_USER']
             if isinstance(user, bytes):
                 user = user.decode('utf-8')
