@@ -1,10 +1,41 @@
-from flask import Blueprint
+from flask import Blueprint, request
 from ckan.plugins import toolkit
 from ckan import logic, model, authz
 
 
 not_auth_message = toolkit._('Unauthorized')
 request_not_found_message = toolkit._('Request not found')
+
+
+def _get_user():
+    """Return the authenticated username for the current request.
+
+    Resolution order:
+    1. ``toolkit.g.user`` — CKAN's session-validated identity, set by Flask-Login
+       via ``identify_user()`` during ``ckan_before_request``. This is the primary
+       and most trustworthy source in production.
+    2. ``REMOTE_USER`` environ key — fallback active only when ``testing = true``
+       in the CKAN config, for test environments where ``toolkit.g.user`` may not
+       be populated (e.g. when using ``extra_environ`` in test client requests).
+       The value is validated against the database and rejected if the user does
+       not exist or has been deleted. This path is never active in production.
+
+    Returns the username string, or ``None`` if no authenticated user can be
+    determined.
+    """
+    if hasattr(toolkit.g, 'user') and toolkit.g.user:
+        return toolkit.g.user
+    try:
+        if toolkit.config.get('testing') and 'REMOTE_USER' in request.environ:
+            user = request.environ['REMOTE_USER']
+            if isinstance(user, bytes):
+                user = user.decode('utf-8')
+            userobj = model.User.get(user)
+            if userobj and not userobj.is_deleted():
+                return user
+    except (AttributeError, KeyError, TypeError, UnicodeDecodeError):
+        pass
+    return None
 
 
 member_request = Blueprint('member_request', __name__, url_prefix='/member-request')
@@ -74,7 +105,7 @@ def _save_new(context):
 @member_request.route('/mylist')
 def mylist():
     """" Lists own members requests (possibility to cancel and view current status)"""
-    context = {'user': toolkit.g.get('user') or toolkit.g.get('author')}
+    context = {'user': _get_user()}
     id = toolkit.request.args.get('id', None)
     if not authz.is_sysadmin(toolkit.c.user):
         try:
@@ -96,7 +127,7 @@ def mylist():
 @member_request.route('/list')
 def member_requests_list():
     """ Lists member requests to be approved by admins"""
-    context = {'user': toolkit.g.get('user') or toolkit.g.get('author')}
+    context = {'user': _get_user()}
     id = toolkit.request.args.get('id', None)
     try:
         member_requests = toolkit.get_action(
@@ -126,7 +157,7 @@ def approve(mrequest_id):
 @member_request.route('/cancel', methods=['GET', 'POST'])
 def cancel():
     """ Logged in user can cancel pending requests not approved yet by admins/editors"""
-    context = {'user': toolkit.g.get('user') or toolkit.g.get('author')}
+    context = {'user': _get_user()}
     organization_id = toolkit.request.args.get('organization_id', None)
     try:
         toolkit.get_action('member_request_cancel')(
@@ -142,7 +173,7 @@ def cancel():
 @member_request.route('/membership-cancel/<organization_id>', methods=['GET', 'POST'])
 def membership_cancel(organization_id):
     """ Logged in user can cancel already approved/existing memberships """
-    context = {'user': toolkit.g.get('user') or toolkit.g.get('author')}
+    context = {'user': _get_user()}
     try:
         toolkit.get_action('member_request_membership_cancel')(
             context, {"organization_id": organization_id})
@@ -158,7 +189,8 @@ def membership_cancel(organization_id):
 def show(mrequest_id):
     """" Shows a single member request.
     To be used by admins in case they want to modify granted role or accept via e-mail """
-    context = {'user': toolkit.g.get('user') or toolkit.g.get('author')}
+    context = {'user': _get_user()}
+
     try:
         membershipdto = toolkit.get_action('member_request_show')(
             context, {'mrequest_id': mrequest_id})
@@ -182,7 +214,7 @@ def _get_available_roles(context, organization_id):
 
 
 def _processbyadmin(mrequest_id, approve):
-    context = {'user': toolkit.g.get('user') or toolkit.g.get('author')}
+    context = {'user': _get_user()}
     role = toolkit.request.args.get('role', None)
     data_dict = {"mrequest_id": mrequest_id, 'role': role}
     try:

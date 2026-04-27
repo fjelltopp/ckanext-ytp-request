@@ -1,16 +1,17 @@
 import logging
 from ckan import model, authz
-from ckan.common import c, _
+from ckan.common import _
 
 log = logging.getLogger(__name__)
 
 
 def member_request(context, data_dict):
     """ Only allowed to sysadmins or organization admins """
-    if not c.userobj:
+    user = context.get('user')
+    if not user:
         return {'success': False}
 
-    if authz.is_sysadmin(c.user):
+    if authz.is_sysadmin(user):
         return {'success': True}
 
     membership = model.Member.get(data_dict.get("mrequest_id"))
@@ -20,11 +21,15 @@ def member_request(context, data_dict):
     if membership.table_name != 'user':
         return {'success': False}
 
+    userobj = model.User.get(user)
+    if not userobj:
+        return {'success': False}
+
     query = (model.Session.query(model.Member)
                           .filter(model.Member.state == 'active')
                           .filter(model.Member.table_name == 'user')
                           .filter(model.Member.capacity == 'admin')
-                          .filter(model.Member.table_id == c.userobj.id)
+                          .filter(model.Member.table_id == userobj.id)
                           .filter(model.Member.group_id == membership.group_id))
     return {'success': query.count() > 0}
 

@@ -3,7 +3,7 @@ import uuid
 import datetime
 import six
 
-from sqlalchemy import Column, ForeignKey
+from sqlalchemy import Column, ForeignKey, inspect
 from sqlalchemy import types
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -54,8 +54,9 @@ class MemberRequest(Base):
 
 
 def init_tables():
-    MemberRequest.__table__.create()
+    MemberRequest.__table__.create(model.meta.engine)
 
 
 def tables_exist():
-    return MemberRequest.__table__.exists()
+    inspector = inspect(model.meta.engine)
+    return MemberRequest.__tablename__ in inspector.get_table_names()
