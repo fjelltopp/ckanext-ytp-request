@@ -26,7 +26,7 @@ def _get_user():
     if hasattr(toolkit.g, 'user') and toolkit.g.user:
         return toolkit.g.user
     try:
-        if toolkit.config.get('testing') and 'REMOTE_USER' in request.environ:
+        if toolkit.asbool(toolkit.config.get('testing')) and 'REMOTE_USER' in request.environ:
             user = request.environ['REMOTE_USER']
             if isinstance(user, bytes):
                 user = user.decode('utf-8')
@@ -105,9 +105,10 @@ def _save_new(context):
 @member_request.route('/mylist')
 def mylist():
     """" Lists own members requests (possibility to cancel and view current status)"""
-    context = {'user': _get_user()}
+    user = _get_user()
+    context = {'user': user}
     id = toolkit.request.args.get('id', None)
-    if not authz.is_sysadmin(toolkit.c.user):
+    if not authz.is_sysadmin(user):
         try:
             my_requests = toolkit.get_action(
                 'member_requests_mylist')(context, {})

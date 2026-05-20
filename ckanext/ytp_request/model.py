@@ -54,7 +54,7 @@ class MemberRequest(Base):
 
 
 def init_tables():
-    MemberRequest.__table__.create(model.meta.engine)
+    MemberRequest.__table__.create(model.meta.engine, checkfirst=True)
 
 
 def tables_exist():
