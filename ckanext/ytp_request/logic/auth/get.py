@@ -38,16 +38,16 @@ def member_requests_mylist(context, data_dict):
     """ Show request access check """
     # TODO: Sysadmins dont have this functionality since it is pointless. Make
     # it at the logical level
-    return _only_registered_user()
+    return _only_registered_user(context)
 
 
 def member_requests_list(context, data_dict):
     """ Show request access check """
-    return _only_registered_user()
+    return _only_registered_user(context)
 
 
-def _only_registered_user():
-    if not authz.auth_is_loggedin_user():
+def _only_registered_user(context):
+    if authz.auth_is_anon_user(context):
         return {'success': False, 'msg': _('User is not logged in')}
     return {'success': True}
 
