@@ -79,7 +79,7 @@ def member_requests_list(context, data_dict):
             return []
         # members requests for this organization
         query = query.filter(model.Member.group_id.in_(
-            admin_in_groups.values(model.Member.group_id)))
+            admin_in_groups.with_entities(model.Member.group_id).scalar_subquery()))
 
     group = data_dict.get('group', None)
     if group:
